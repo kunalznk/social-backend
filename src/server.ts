@@ -1,3 +1,4 @@
+import { mo } from "./db/minio";
 import { verfiyToken, handleError } from "./utils/common";
 import { ApolloServer } from "apollo-server-express";
 import { constraintDirective, constraintDirectiveTypeDefs } from "graphql-constraint-directive"
