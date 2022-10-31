@@ -1,0 +1,188 @@
+scalar DateTime
+
+type User {
+  id: ID
+  username: String! 
+  fullName: String!
+  emailId: String!
+  profilePic: String
+  isPublic: Boolean
+
+  follower: Int
+  following: Int
+
+  posts: [Post!]
+
+  token: String!
+}
+
+type Post {
+  id: ID!
+  title: String
+  content: String
+  mediaPath: String!
+  mediaFormat: String!
+  authorId: Int!
+
+  likes: [Like]
+  comments: [Comment]
+}
+
+type Comment {
+  id: ID!
+  comment: String!
+  user: User!
+}
+
+type Like {
+  postId: Int!
+  userId: Int!
+}
+
+input UserFilterType {
+  username: String
+  fullName: String
+}
+
+input PostFilterType {
+  title: String
+  userId: ID
+}
+
+input CommentFilterType {
+  postId: ID
+  userId: ID
+}
+
+input createUserInput {
+  username: String! @constraint(minLength: 5, maxLength: 100)
+  fullName: String! @constraint(minLength: 5, maxLength: 100)
+  emailId: String!  @constraint(minLength: 5, maxLength: 100 , format:"email")
+  password: String!  @constraint(minLength: 5, maxLength: 128)
+  profilePic: String @constraint(minLength: 5, maxLength: 1000)
+}
+
+input updateUserInput {
+  username: String @constraint(minLength: 5, maxLength: 100)
+  fullName: String @constraint(minLength: 5, maxLength: 100)
+  emailId: String  @constraint(minLength: 5, maxLength: 100 , format:"email")
+  profilePic: String @constraint(minLength: 5, maxLength: 1000)
+  isPublic: Boolean
+}
+
+input deleteUserInput {
+  id: ID!
+}
+
+input loginInput {
+  username: String! @constraint(minLength: 5 , maxLength:128)
+  emailId: String @constraint(minLength: 5 , maxLength:100 , format:"email")
+  password: String!  @constraint(minLength: 5 , maxLength:100)
+}
+
+input forgetPasswordInput {
+  emailId: String! @constraint(minLength: 5 , maxLength:100 , format:"email")
+}
+
+input resetPasswordInput {
+  emailId: String!  @constraint(minLength: 5 , maxLength:100 , format:"email")
+  userId: Int!
+  password: String! @constraint(minLength: 5 , maxLength:100)
+  confirmPass: String!  @constraint(minLength: 5 , maxLength:100)
+  token: String!  @constraint(minLength: 5 , maxLength:5000)
+}
+
+input followerInput {
+  followingId: Int!
+  status: Boolean!
+}
+
+input followingInput {
+  followerId: Int!
+}
+
+type Media {
+  mediaGetPath: String!
+  mediaPostPath: String!
+  mediaFormat: String
+}
+
+input createMediaInput {
+  fileName: String!
+  fileType: String!
+}
+
+input createPostInput {
+  title: String
+  content: String
+  mediaPath: String!
+  mediaFormat: String!
+  tagUsers: [Int!]!
+}
+
+input updatePostInput {
+  postId: ID!
+  title: String
+  content: String
+  tagUsers: [Int!]!
+}
+
+input deletePostInput {
+  postId: ID!
+}
+
+input likePostInput {
+  isLike: Boolean!
+  postId: ID!
+}
+
+input createCommentInput {
+  postId: ID!
+  comment: String!
+}
+
+input updateCommentInput {
+  commentId: ID!
+  comment: String!
+}
+
+input deleteCommentInput {
+  commentId: ID!
+}
+
+type Query {
+  user(id: ID): User
+  users(userFilter: UserFilterType): [User]
+
+  post(id: ID): Post
+  posts(postFilter: PostFilterType): [Post]
+
+  comment(id: ID): Comment
+  comments(commentFilter: CommentFilterType): [Comment]
+}
+
+type Mutation {
+  register(input: createUserInput): Boolean!
+  login(input: loginInput): String
+  forgetPassword(input: forgetPasswordInput): Boolean!
+  resetPassword(input: resetPasswordInput): Boolean!
+  logout: Boolean
+
+  updateFollower(input: followerInput): Boolean
+  updateFollowing(input: followingInput): Boolean
+
+  createUser(input: createUserInput): User
+  updateUser(input: updateUserInput): User
+  deleteUser(input: deleteUserInput): Boolean
+
+  createMediaUrl(input: createMediaInput): Media
+  createPost(input: createPostInput): Post
+  updatePost(input: updatePostInput): Post
+  deletePost(input: deletePostInput): Boolean
+
+  likePost(input: likePostInput): Boolean
+
+  createComment(input: createCommentInput): Comment
+  updateComment(input: updateCommentInput): Comment
+  deleteComment(input: deleteCommentInput): Boolean
+}
