@@ -47,6 +47,77 @@ const deleteUser = async (
   }
 };
 
+const updateFollower = async (
+  _parent: any,
+  args: any,
+  ctx: Context,
+  _info: any
+) => {
+  try {
+    const { prisma, user: User } = ctx;
+    const { followingId, status } = args.input;
+
+    if (status) {
+      // add entry to follower table
+      // update follwer will handle acccept or reject if acc is private
+
+      await prisma.follower.upsert({
+        create: {
+          userId: User?.id,
+          followerId: followingId,
+          isAccepted: User.isPublic,
+        },
+        update: {
+          isAccepted: true,
+        },
+        where: {
+          user_followe_key: {
+            userId: User?.id,
+            followerId: followingId,
+          },
+        },
+      });
+    } else {
+      await prisma.follower.delete({
+        where: {
+          user_followe_key: {
+            userId: User?.id,
+            followerId: parseInt(followingId),
+          },
+        },
+      });
+    }
+    return true;
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+const updateFollowing = async (
+  _parent: any,
+  args: any,
+  ctx: Context,
+  _info: any
+) => {
+  try {
+    const { prisma, user: User } = ctx;
+    const { followingId } = args.input;
+
+    await prisma.follower.delete({
+      where: {
+        user_followe_key: {
+          userId: User?.id,
+          followerId: parseInt(followingId),
+        },
+      },
+    });
+
+    return true;
+  } catch (error) {
+    handleError(error);
+  }
+};
+
 export default {
   updateUser,
   deleteUser,
