@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "ts-node-dev --no-notify --respawn --transpile-only --debug --inspect=4321  --watch src/schema/schema src/server",
     "generate": "prisma generate",
-    "format": "npx prettier --write ."
+    "format": "npx prettier --write .",
+    "start": "ts-node-dev --no-notify --respawn --transpile-only --watch src/server",
+
   },
   "keywords": [],
   "author": "",
