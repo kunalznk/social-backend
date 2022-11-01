@@ -50,4 +50,3 @@ export const validatePassword = (
 
 export const sendMail = () => {};
 
-// sudo docker run --name postgresql -e POSTGRES_USER=kunal -e POSTGRES_PASSWORD=root123 -p 5432:5432 -v /data:/var/lib/postgresql/data -d postgres
