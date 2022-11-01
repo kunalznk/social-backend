@@ -11,6 +11,14 @@ const isAuthenticated = rule({ cache: "contextual" })(
 const Query = {
   "*": allow,
 
+  user: isAuthenticated,
+  users: isAuthenticated,
+
+  post: isAuthenticated,
+  posts: isAuthenticated,
+
+  comment: isAuthenticated,
+  comments: isAuthenticated,
 };
 
 const Mutation = {
@@ -20,6 +28,23 @@ const Mutation = {
   resetPassword: allow,
   logout: isAuthenticated,
 
+  updateFollower: isAuthenticated,
+  updateFollowing: isAuthenticated,
+
+  createUser: allow,
+  updateUser: isAuthenticated,
+  deleteUser: isAuthenticated,
+
+  createMediaUrl: isAuthenticated,
+  createPost: isAuthenticated,
+  updatePost: isAuthenticated,
+  deletePost: isAuthenticated,
+
+  likePost: isAuthenticated,
+
+  createComment: isAuthenticated,
+  updateComment: isAuthenticated,
+  deleteComment: isAuthenticated,
 };
 
 const rules: IRules = {

@@ -34,6 +34,36 @@ const users = async (_parent: any, args: any, ctx: Context, _info: any) => {
   }
 };
 
+// follower means list of users who follow user
+export const follower = async (_parent: any, args: any, ctx: Context, _info: any) => {
+  const { prisma, user: User } = ctx;
+  try {
+    const users = await prisma.follower.findMany({
+      where:{
+        userId:User.id
+      }
+    })
+    return users.length;
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+// following means list of users where particular user follow  
+export const following = async (parent: any, args: any, ctx: Context, _info: any) => {
+  const { prisma, user: User } = ctx;
+  try {
+    const users = await prisma.follower.findMany({
+     where:{
+      followerId:User.id
+     }
+    })
+
+    return users.length;
+  } catch (error) {
+    handleError(error);
+  }
+};
 export default {
   user,
   users,
